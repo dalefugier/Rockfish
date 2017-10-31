@@ -22,8 +22,7 @@ namespace RockfishClient
       if (crv == null)
         return Result.Failure;
 
-      var rf_curve = new RockfishCurve();
-      rf_curve.Curve = crv;
+      var rf_curve = new RockfishCurve(crv);
 
       Guid guid = Guid.Empty;
       try
