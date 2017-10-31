@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using System.Runtime.Serialization;
 using Rhino.Geometry;
 
 namespace RockfishCommon
@@ -8,12 +6,12 @@ namespace RockfishCommon
   [DataContract]
   public class RockfishCurve
   {
-    public RockfishCurve(Rhino.Geometry.Curve curve)
+    public RockfishCurve(Curve curve)
     {
       Curve = curve;
     }
 
-    public Rhino.Geometry.Curve Curve { get; private set; }
+    public Curve Curve { get; private set; }
 
     //[DataMember]
     //public byte[] Data
@@ -43,7 +41,7 @@ namespace RockfishCommon
     public byte[] Data
     {
       get => Curve.ToBytes();
-      set => Curve = Curve.ToGeometryBase(value) as Rhino.Geometry.Curve;
+      set => Curve = Curve.ToGeometryBase(value) as Curve;
     }
 
   }

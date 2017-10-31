@@ -1,12 +1,24 @@
 ﻿using System;
-using System.CodeDom;
 using System.IO;
-using System.Runtime.Remoting.Channels;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Rhino.Geometry;
 
 namespace RockfishCommon
 {
+  [DataContract]
+  public class RockfishGeometry
+  {
+    public RockfishGeometry(GeometryBase src)
+    {
+      Geometry = src;
+    }
+
+    public GeometryBase Geometry { get; private set; }
+
+
+  }
+
   /// <summary>
   /// Extension methods
   /// </summary>
