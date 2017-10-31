@@ -6,7 +6,7 @@ namespace RockfishCommon
   [DataContract]
   public class RockfishCurve
   {
-    private Rhino.Geometry.Curve m_curve;
+    private readonly Rhino.Geometry.Curve m_curve;
 
     public RockfishCurve(Rhino.Geometry.Curve curve)
     {
