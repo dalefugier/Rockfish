@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RockfishCommon
 {
@@ -12,13 +8,14 @@ namespace RockfishCommon
   {
     private ChannelFactory<IRockfishService> m_factory;
     private IRockfishService m_channel;
-    private NetNamedPipeBinding m_binding;
+    //private NetNamedPipeBinding m_binding;
+    private BasicHttpBinding m_binding;
     private EndpointAddress m_endpoint;
     private readonly object m_locker;
     private bool m_disposed;
 
     /// <summary>
-    /// Constructor
+    /// Public constructor
     /// </summary>
     public RockfishChannel()
     {
@@ -29,13 +26,19 @@ namespace RockfishCommon
     /// <summary>
     /// Public creator
     /// </summary>
-    public bool Create()
+    public bool Create(string hostName)
     {
+      if (string.IsNullOrEmpty(hostName))
+        return false;
+
       var rc = false;
       try
       {
-        m_binding = new NetNamedPipeBinding();
-        m_endpoint = new EndpointAddress("net.pipe://localhost/mcneel/rockfishserver/1/server/pipe");
+        //m_binding = new NetNamedPipeBinding();
+        //var uri = "net.pipe://localhost/mcneel/rockfishserver/5/server/pipe";
+        m_binding = new BasicHttpBinding();
+        var uri = $"http://{hostName}:8000/mcneel/rockfish/5/server/basic";
+        m_endpoint = new EndpointAddress(uri);
         m_factory = new ChannelFactory<IRockfishService>(m_binding, m_endpoint);
         m_channel = m_factory.CreateChannel();
         rc = true;
@@ -49,8 +52,10 @@ namespace RockfishCommon
     }
 
     /// <summary>
-    /// Simple test to see if the Rockfish service is operational
+    /// Simple test to see if the RockFish service is operational
     /// </summary>
+    /// <param name="str"></param>
+    /// <returns>The echoed string if successful.</returns>
     public string Echo(string str)
     {
       if (IsValid)
@@ -70,26 +75,12 @@ namespace RockfishCommon
     }
 
     /// <summary>
-    /// 
+    /// Intersects two Brep objects and returns the intersection curves
     /// </summary>
-    public Guid AddCurve(RockfishGeometry geometry)
-    {
-      if (IsValid)
-      {
-        try
-        {
-          var result = m_channel.AddCurve(geometry);
-          return result;
-        }
-        catch (Exception ex)
-        {
-          HandleException(ex);
-          Dispose();
-        }
-      }
-      return Guid.Empty;
-    }
-
+    /// <param name="brep0">The first Brep.</param>
+    /// <param name="brep1">The second Brep.</param>
+    /// <param name="tolerance">The intersection tolerance.</param>
+    /// <returns>The intersection curves if successful.</returns>
     public RockfishGeometry[] IntersectBreps(RockfishGeometry brep0, RockfishGeometry brep1, double tolerance)
     {
       if (IsValid)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Principal;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using Rhino;
@@ -12,36 +13,65 @@ namespace RockfishServer
     private ServiceHost m_service_host;
 
     /// <summary>
-    /// Constructor
+    /// Gets the command name.
     /// </summary>
-    public RockfishServerCommand()
-    {
-    }
-
-    /// <inheritdoc />
     public override string EnglishName => "RockfishServer";
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Runs the command
+    /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
+      if (!IsAdministrator())
+      {
+        RhinoApp.WriteLine("To start the service, please run Rhino as Administrator.");  
+        return Result.Cancel;
+      }
+
+      // Toggle service operation
       if (null == m_service_host)
         Start();
       else
         Stop();
+
       return Result.Success;
+    }
+
+    /// <summary>
+    /// Detects whether or not Rhino is running "as Administrtor".
+    /// Adminstrative privledges are required to HTTP binding.
+    /// </summary>
+    private static bool IsAdministrator()
+    {
+      try
+      {
+        var user = WindowsIdentity.GetCurrent();
+        var principal = new WindowsPrincipal(user);
+        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+      }
+      catch
+      {
+        // ignored
+      }
+      return false;
     }
 
     /// <summary>
     /// Starts the server service.
     /// </summary>
-    bool Start()
+    private bool Start()
     {
       try
       {
+        //  m_service_host = new ServiceHost(
+        //    typeof(RockfishService),
+        //    new Uri("net.pipe://localhost/mcneel/rockfishserver/5/server"));
+
         m_service_host = new ServiceHost(
-          typeof(RockfishService),
-          new Uri("net.pipe://localhost/mcneel/rockfishserver/1/server"));
-        RhinoApp.WriteLine("Service host created.");
+          typeof(RockfishService), 
+          new Uri("http://localhost:8000/mcneel/rockfish/5/server"));
+
+         RhinoApp.WriteLine("Service host created.");
       }
       catch
       {
@@ -52,9 +82,14 @@ namespace RockfishServer
 
       try
       {
+        //m_service_host.AddServiceEndpoint(
+        //  typeof(IRockfishService), 
+        //  new NetNamedPipeBinding(), "pipe");
+
         m_service_host.AddServiceEndpoint(
-          typeof(IRockfishService), 
-          new NetNamedPipeBinding(), "pipe");
+          typeof(IRockfishService),
+          new BasicHttpBinding(), "basic");
+
         RhinoApp.WriteLine("Service end point created.");
       }
       catch
@@ -104,7 +139,7 @@ namespace RockfishServer
     /// <summary>
     /// Stop the service.
     /// </summary>
-    void Stop()
+    private void Stop()
     {
       if (null != m_service_host)
       {
