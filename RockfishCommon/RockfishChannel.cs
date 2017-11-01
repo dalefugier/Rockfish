@@ -72,13 +72,13 @@ namespace RockfishCommon
     /// <summary>
     /// 
     /// </summary>
-    public Guid AddCurve(RockfishCurve curve)
+    public Guid AddCurve(RockfishGeometry geometry)
     {
       if (IsValid)
       {
         try
         {
-          var result = m_channel.AddCurve(curve);
+          var result = m_channel.AddCurve(geometry);
           return result;
         }
         catch (Exception ex)
@@ -90,6 +90,24 @@ namespace RockfishCommon
       return Guid.Empty;
     }
 
+    public RockfishGeometry[] IntersectBreps(RockfishGeometry brep0, RockfishGeometry brep1, double tolerance)
+    {
+      if (IsValid)
+      {
+        try
+        {
+          var result = m_channel.IntersectBreps(brep0, brep1, tolerance);
+          return result;
+        }
+        catch (Exception ex)
+        {
+          HandleException(ex);
+          Dispose();
+        }
+      }
+      return new RockfishGeometry[0];
+
+    }
 
     /// <summary>
     /// Object validator
@@ -99,7 +117,7 @@ namespace RockfishCommon
     /// <summary>
     /// Exception handler
     /// </summary>
-    private void HandleException(Exception ex)
+    private static void HandleException(Exception ex)
     {
       if (ex is FaultException)
       {

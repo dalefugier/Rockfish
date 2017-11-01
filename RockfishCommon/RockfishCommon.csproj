@@ -51,8 +51,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RockfishChannel.cs" />
     <Compile Include="RockfishChannelException.cs" />
-    <Compile Include="RockfishCurve.cs" />
-    <Compile Include="RockfishExtensions.cs" />
+    <Compile Include="RockfishGeometry.cs" />
+    <Compile Include="RockfishPoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

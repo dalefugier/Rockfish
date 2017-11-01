@@ -13,6 +13,9 @@ namespace RockfishCommon
     string Echo(string str);
 
     [OperationContract]
-    Guid AddCurve(RockfishCurve rockfishCurve);
+    Guid AddCurve(RockfishGeometry curve);
+
+    [OperationContract]
+    RockfishGeometry[] IntersectBreps(RockfishGeometry brep0, RockfishGeometry brep1, double tolerance);
   }
 }

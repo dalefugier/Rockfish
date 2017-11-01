@@ -18,13 +18,13 @@ namespace RockfishClient
       if (rc != Result.Success || objref == null)
         return rc;
 
-      var crv = objref.Curve();
-      if (crv == null)
+      var curve = objref.Curve();
+      if (curve == null)
         return Result.Failure;
 
-      var rf_curve = new RockfishCurve(crv);
+      var rf_curve = new RockfishGeometry(curve);
 
-      Guid guid = Guid.Empty;
+      var guid = Guid.Empty;
       try
       {
         var channel = new RockfishChannel();
