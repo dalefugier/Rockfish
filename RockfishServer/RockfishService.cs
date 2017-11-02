@@ -1,41 +1,38 @@
-﻿using System;
-using Rhino;
+﻿using Rhino;
 using Rhino.Geometry;
 using RockfishCommon;
 
 namespace RockfishServer
 {
+  /// <summary>
+  /// IRockfishService implementation
+  /// </summary>
   public class RockfishService : IRockfishService
   {
     /// <summary>
-    /// Constructor
+    /// Simple test to see if the RockFish service is operational
     /// </summary>
-    public RockfishService()
-    {
-      // TODO...
-    }
-
-    /// <inheritdoc />
+    /// <param name="str"></param>
+    /// <returns>The echoed string if successful.</returns>
     public string Echo(string str)
     {
-      RhinoApp.WriteLine("Echo received : " + str);
-      return "Echo from Server : " + str;
+      RhinoApp.WriteLine("Echo request received : " + str);
+      var host_name = RockfishServerPlugIn.Instance.ServerHostName();
+      var rc = $"Echo from \"{host_name}\" : {str}";
+      return rc;
     }
 
-    public Guid AddCurve(RockfishGeometry curve)
-    {
-      if (curve?.Curve != null)
-      {
-        var doc = RhinoDoc.ActiveDoc;
-        var guid = doc.Objects.AddCurve(curve.Curve);
-        doc.Views.Redraw();
-        return guid;
-      }
-      return Guid.Empty;
-    }
-
+    /// <summary>
+    /// Intersects two Brep objects and returns the intersection curves
+    /// </summary>
+    /// <param name="brep0">The first Brep.</param>
+    /// <param name="brep1">The second Brep.</param>
+    /// <param name="tolerance">The intersection tolerance.</param>
+    /// <returns>The intersection curves if successful.</returns>
     public RockfishGeometry[] IntersectBreps(RockfishGeometry brep0, RockfishGeometry brep1, double tolerance)
     {
+      RhinoApp.WriteLine("IntersectBreps request received");
+
       if (null == brep0?.Brep || null == brep1?.Brep)
         return new RockfishGeometry[0];
 

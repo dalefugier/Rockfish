@@ -11,13 +11,16 @@ namespace RockfishClient
   {
     private string m_server_host_name;
 
+    /// <summary>
+    /// Public constructor (called by Rhino)
+    /// </summary>
     public RockfishClientPlugIn()
     {
       Instance = this;
     }
 
     /// <summary> 
-    /// Gets the only instance of the RockfishClientPlugIn plug-in.
+    /// Gets the one and only instance of the RockfishClientPlugIn object.
     /// </summary>
     public static RockfishClientPlugIn Instance
     {
@@ -25,7 +28,7 @@ namespace RockfishClient
     }
 
     /// <summary>
-    /// Called by commands to verify the server host name is set.
+    /// Called by various commands to verify the server host name is set.
     /// </summary>
     public Result VerifyServerHostName()
     {

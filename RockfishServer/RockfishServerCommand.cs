@@ -59,7 +59,7 @@ namespace RockfishServer
     /// <summary>
     /// Starts the server service.
     /// </summary>
-    private bool Start()
+    private void Start()
     {
       try
       {
@@ -77,7 +77,7 @@ namespace RockfishServer
       {
         RhinoApp.WriteLine("Failed to create service host.");
         Stop();
-        return false;
+        return;
       }
 
       try
@@ -96,7 +96,7 @@ namespace RockfishServer
       {
         RhinoApp.WriteLine("Failed to create service end point.");
         Stop();
-        return false;
+        return;
       }
 
       try
@@ -117,7 +117,7 @@ namespace RockfishServer
       {
         RhinoApp.WriteLine("Failed to create Rockfish service debug behavior.");
         Stop();
-        return false;
+        return;
       }
 
       try
@@ -129,11 +129,10 @@ namespace RockfishServer
       {
         RhinoApp.WriteLine("Failed to open Rockfish service.");
         Stop();
-        return false;
+        return;
       }
 
       RhinoApp.WriteLine("Service started.");
-      return true;
     }
 
     /// <summary>
