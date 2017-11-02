@@ -10,7 +10,7 @@ namespace RockfishCommon
 {
   /// <summary>
   /// Class that handles the serialization and deserialization
-  ///  of RhinoCommon geometry object.
+  /// of RhinoCommon GeometryBase object.
   /// </summary>
   [DataContract]
   public class RockfishGeometry
@@ -20,7 +20,7 @@ namespace RockfishCommon
     /// <summary>
     /// Public constructor
     /// </summary>
-    /// <param name="src">The RhinoCommon geometry object.</param>
+    /// <param name="src">The RhinoCommon GeometryBase object.</param>
     public RockfishGeometry(GeometryBase src)
     {
       Geometry = src;
@@ -52,17 +52,18 @@ namespace RockfishCommon
     public ObjectType ObjectType => Geometry.ObjectType;
 
     /// <summary>
-    /// Data contract member
+    /// The GeometryBase member in byte array form.
     /// </summary>
     [DataMember]
     public byte[] Data
     {
       get => ToBytes(Geometry);
-      set => Geometry = ToGeometry(value);
+      set => Geometry = ToGeometryBase(value);
     }
 
     /// <summary>
-    /// Converts a object that inherits from Rhino.Geometry.GeometryBase
+    /// Called during serialization.
+    /// Converts an object that inherits from GeometryBase
     /// to an array of bytes.
     /// </summary>
     private static byte[] ToBytes(GeometryBase src)
@@ -88,7 +89,14 @@ namespace RockfishCommon
       return rc;
     }
 
-    public static GeometryBase ToGeometry(byte[] bytes)
+    /// <summary>
+    /// Called during de-serialization.
+    /// Creates an object that inherits from GeometryBase
+    /// from an array of bytes.
+    /// </summary>
+    /// <param name="bytes">The array of bytes.</param>
+    /// <returns>The geometry if successful.</returns>
+    public static GeometryBase ToGeometryBase(byte[] bytes)
     {
       if (null == bytes || 0 == bytes.Length)
         return null;

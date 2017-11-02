@@ -7,7 +7,11 @@ using RockfishCommon;
 
 namespace RockfishClient.Commands
 {
-  public class RockfishIntersectBreps : Command
+  /// <summary>
+  /// RockfishIntersectBreps command
+  /// </summary>
+  [System.Runtime.InteropServices.Guid("9570A22E-B5A8-485E-82FF-33346993A01A")]
+  public class RockfishIntersectBrepsCommand : Command
   {
     public override string EnglishName => "RockfishIntersectBreps";
 

@@ -6,6 +6,10 @@ using RockfishCommon;
 
 namespace RockfishClient.Commands
 {
+  /// <summary>
+  /// RockfishEcho command
+  /// </summary>
+  [System.Runtime.InteropServices.Guid("F474A13B-DA09-427F-933A-2DC57D1E12D0")]
   public class RockfishEchoCommand : Command
   {
     public override string EnglishName => "RockfishEcho";

@@ -3,6 +3,10 @@ using Rhino.Geometry;
 
 namespace RockfishCommon
 {
+  /// <summary>
+  /// Class that handles the serialization and deserialization
+  /// of RhinoCommon Point3d object.
+  /// </summary>
   [DataContract]
   public class RockfishPoint
   {
@@ -38,7 +42,10 @@ namespace RockfishCommon
     /// <summary>
     /// Get a RhinoCommon Point3d object
     /// </summary>
-    public Point3d ToPoint3D => new Point3d(X, Y, Z);
+    public Point3d ToPoint3d()
+    {
+      return new Point3d(X, Y, Z);
+    }
   }
 
 }

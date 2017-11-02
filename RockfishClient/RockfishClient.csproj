@@ -43,11 +43,12 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\RockfishSetServer.cs" />
+    <Compile Include="Commands\RockfishPolylineFromPointsCommand.cs" />
+    <Compile Include="Commands\RockfishSetServerCommand.cs" />
     <Compile Include="Commands\RockfishEchoCommand.cs" />
     <Compile Include="RockfishClientPlugIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Commands\RockfishIntersectBreps.cs" />
+    <Compile Include="Commands\RockfishIntersectBrepsCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RockfishCommon\RockfishCommon.csproj">

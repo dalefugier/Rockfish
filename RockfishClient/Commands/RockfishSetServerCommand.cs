@@ -5,7 +5,11 @@ using RockfishCommon;
 
 namespace RockfishClient.Commands
 {
-  public class RockfishSetServer : Command
+  /// <summary>
+  /// RockfishSetServer command
+  /// </summary>
+  [System.Runtime.InteropServices.Guid("3BDD436B-094B-4531-B345-5C9E8F29E257")]
+  public class RockfishSetServerCommand : Command
   {
     public override string EnglishName => "RockfishSetServer";
 
