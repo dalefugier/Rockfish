@@ -32,7 +32,7 @@ The Rockfish sample solution contains the following projects:
 
 **RockfishConsole** - This project creates a .NET console application. The project references the [Rhino3dmIO](https://www.nuget.org/packages/Rhino3dmIO.dll-x64-Windows/) NuGet package which allows .NET applications to read and write Rhino's ```.3dm``` file format. When built, the application will read Breps from ```.3dm``` files and the send them to a Rockfish server. The server will, in turn, return mesh objects which are written to a new ```.3dm``` file. Here is the command line syntax:
 
-```RockfishConsole <host_name> <file_name>```
+```C:\> RockfishConsole <host_name> <file_name>```
 
 ### Notes
 
