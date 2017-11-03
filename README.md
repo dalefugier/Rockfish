@@ -1,20 +1,22 @@
 # Rockfish
 ![](Rockfish.svg)
 ------
-The Rockfish sample project demonstrates how one might set up a [RhinoCommon](http://developer.rhino3d.com/guides/rhinocommon/) plug-in to host a [Windows Communication Foundation](https://docs.microsoft.com/en-us/dotnet/framework/wcf/whats-wcf) (WCF) service.
+The Rockfish sample project demonstrates how one *might* set up a [RhinoCommon](http://developer.rhino3d.com/guides/rhinocommon/) plug-in to host a [Windows Communication Foundation](https://docs.microsoft.com/en-us/dotnet/framework/wcf/whats-wcf) (WCF) service.
 
 ### Prerequisites
 
 To build the Rockfish solution, you will need the following:
 
-- [Microsoft Visual Studio](https://www.visualstudio.com/) - Any of the free version of Visual Studio, that can build plug-ins for Rhino, will work. 
+- [Visual Studio](https://www.visualstudio.com/) - Any of the free version of Microsoft Visual Studio, that can build plug-ins for Rhino, will work. 
 - [Rhino](http://www.rhino3d.com/) - The project current targets Rhino 5. But with some minor effort, the project could easily be refactored to work with Rhino 6.
 
 ### Overview
 
 The Rockfish sample solution contains the following projects:
 
-**RockfishServer** - This project builds a RhinoCommon plug-in that hosts a WCF Service. The service current uses basic HTTP binding, but it has provisions for named pipes for ease of testing. The service contract has four simple operations that can be called from client systems. The project has a single ```RockfishServer``` command that starts and stops the service. Note, to access the service remotely, you will need to open ```TCP Port 8000``` on any firewall software running on the system.
+**RockfishServer** - This project builds a RhinoCommon plug-in that hosts a WCF Service. The service current uses basic HTTP binding, but it has provisions for named pipes for ease of testing. The service contract has four simple operations that can be called from client systems. The project has a single ```RockfishServer``` command that starts and stops the service. 
+
+Note, to access the service remotely, you will need to open ```TCP Port 8000``` on any firewall software running on the system. And in order for the service to listen on ```TCP Port 8000```, Rhino will need to be launched "as Administrator."
 
 **RockfishClient** - This project also builds a RhinoCommon plug-in, and it consumes the service provided by RockfishServer. The plug-in provides five simple commands:
 
