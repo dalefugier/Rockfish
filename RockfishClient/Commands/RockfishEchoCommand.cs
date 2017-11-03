@@ -12,8 +12,14 @@ namespace RockfishClient.Commands
   [System.Runtime.InteropServices.Guid("F474A13B-DA09-427F-933A-2DC57D1E12D0")]
   public class RockfishEchoCommand : Command
   {
+    /// <summary>
+    /// Gets the command name.
+    /// </summary>
     public override string EnglishName => "RockfishEcho";
 
+    /// <summary>
+    /// Called by Rhino when the user wants to run the command.
+    /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
       var rc = RockfishClientPlugIn.Instance.VerifyServerHostName();

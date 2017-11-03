@@ -13,8 +13,14 @@ namespace RockfishClient.Commands
   [System.Runtime.InteropServices.Guid("9570A22E-B5A8-485E-82FF-33346993A01A")]
   public class RockfishIntersectBrepsCommand : Command
   {
+    /// <summary>
+    /// Gets the command name.
+    /// </summary>
     public override string EnglishName => "RockfishIntersectBreps";
 
+    /// <summary>
+    /// Called by Rhino when the user wants to run the command.
+    /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
       var rc = RockfishClientPlugIn.Instance.VerifyServerHostName();

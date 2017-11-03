@@ -11,8 +11,14 @@ namespace RockfishClient.Commands
   [System.Runtime.InteropServices.Guid("3BDD436B-094B-4531-B345-5C9E8F29E257")]
   public class RockfishSetServerCommand : Command
   {
+    /// <summary>
+    /// Gets the command name.
+    /// </summary>
     public override string EnglishName => "RockfishSetServer";
 
+    /// <summary>
+    /// Called by Rhino when the user wants to run the command.
+    /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
       var server_host_name = RockfishClientPlugIn.Instance.ServerHostName();

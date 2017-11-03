@@ -14,8 +14,14 @@ namespace RockfishClient.Commands
   [System.Runtime.InteropServices.Guid("50076313-0259-464A-9BC7-5B4FBC26A764")]
   public class RockfishPolylineFromPointsCommand : Command
   {
+    /// <summary>
+    /// Gets the command name.
+    /// </summary>
     public override string EnglishName => "RockfishPolylineFromPoints";
 
+    /// <summary>
+    /// Called by Rhino when the user wants to run the command.
+    /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
       var rc = RockfishClientPlugIn.Instance.VerifyServerHostName();

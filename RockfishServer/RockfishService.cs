@@ -8,7 +8,7 @@ using RockfishCommon;
 namespace RockfishServer
 {
   /// <summary>
-  /// IRockfishService implementation
+  /// IRockfishService definition
   /// </summary>
   public class RockfishService : IRockfishService
   {

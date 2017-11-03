@@ -12,7 +12,7 @@ namespace RockfishServer
     private string m_server_host_name;
 
     /// <summary>
-    /// Public constructor (called by Rhino)
+    /// Public constructor (called by Rhino).
     /// </summary>
     public RockfishServerPlugIn()
     {
@@ -28,7 +28,7 @@ namespace RockfishServer
     }
 
     /// <summary>
-    /// Returns the local host name
+    /// Returns the local host name.
     /// </summary>
     public string ServerHostName()
     {

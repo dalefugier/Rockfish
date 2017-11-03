@@ -18,7 +18,7 @@ namespace RockfishServer
     public override string EnglishName => "RockfishServer";
 
     /// <summary>
-    /// Runs the command
+    /// Called by Rhino when the user wants to run the command.
     /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {

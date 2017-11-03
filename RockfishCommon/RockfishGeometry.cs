@@ -83,7 +83,7 @@ namespace RockfishCommon
       }
       catch (Exception e)
       {
-        RhinoApp.WriteLine(e.Message);
+        Console.WriteLine(e.Message);
       }
 
       return rc;
@@ -116,7 +116,7 @@ namespace RockfishCommon
       }
       catch (Exception e)
       {
-        RhinoApp.WriteLine(e.Message);
+        Console.WriteLine(e.Message);
       }
 
       return rc;
