@@ -4,14 +4,14 @@ using Rhino.PlugIns;
 
 // Plug-in Description Attributes - all of these are optional.
 // These will show in Rhino's option dialog, in the tab Plug-ins.
-[assembly: PlugInDescription(DescriptionType.Address, "-")]
-[assembly: PlugInDescription(DescriptionType.Country, "-")]
-[assembly: PlugInDescription(DescriptionType.Email, "-")]
-[assembly: PlugInDescription(DescriptionType.Phone, "-")]
-[assembly: PlugInDescription(DescriptionType.Fax, "-")]
-[assembly: PlugInDescription(DescriptionType.Organization, "-")]
-[assembly: PlugInDescription(DescriptionType.UpdateUrl, "-")]
-[assembly: PlugInDescription(DescriptionType.WebSite, "-")]
+[assembly: PlugInDescription(DescriptionType.Address, "3670 Woodland Park Avenue North\r\nSeattle, WA 98103")]
+[assembly: PlugInDescription(DescriptionType.Country, "United States")]
+[assembly: PlugInDescription(DescriptionType.Email, "dale@mcneel.com")]
+[assembly: PlugInDescription(DescriptionType.Phone, "206-545-6877")]
+[assembly: PlugInDescription(DescriptionType.Fax, "206-545-7321")]
+[assembly: PlugInDescription(DescriptionType.Organization, "Robert McNeel & Associates")]
+[assembly: PlugInDescription(DescriptionType.UpdateUrl, "https://github.com/dalefugier/Rockfish")]
+[assembly: PlugInDescription(DescriptionType.WebSite, "http://www.rhino3d.com/")]
 
 // Icons should be Windows .ico files and contain 32-bit images in the following sizes: 16, 24, 32, 48, and 256.
 // This is a Rhino 6-only description.
@@ -21,10 +21,7 @@ using Rhino.PlugIns;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("RockfishClient")]
-
-// This will be used also for the plug-in description.
-[assembly: AssemblyDescription("RockfishClient utility plug-in")]
-
+[assembly: AssemblyDescription("RockfishClient plug-in")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Robert McNeel & Associates")]
 [assembly: AssemblyProduct("RockfishClient")]

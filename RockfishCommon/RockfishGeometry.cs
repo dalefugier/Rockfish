@@ -2,7 +2,6 @@
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Rhino;
 using Rhino.DocObjects;
 using Rhino.Geometry;
 

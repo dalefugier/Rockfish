@@ -64,8 +64,8 @@ namespace RockfishClient.Commands
       }
 
       if (null != out_curve?.Curve)
-      { 
-        var object_id = doc.Objects.AddCurve(out_curve.Curve);
+      {
+        doc.Objects.AddCurve(out_curve.Curve);
         doc.Views.Redraw();
       }
 
