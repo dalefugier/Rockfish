@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Rhino;
 using Rhino.Commands;
 using Rhino.DocObjects;
@@ -8,15 +9,15 @@ using RockfishCommon;
 namespace RockfishClient.Commands
 {
   /// <summary>
-  /// RockfishIntersectBreps command
+  /// RF_PolylineFromPoints command
   /// </summary>
-  [System.Runtime.InteropServices.Guid("9570A22E-B5A8-485E-82FF-33346993A01A")]
-  public class RockfishIntersectBrepsCommand : Command
+  [System.Runtime.InteropServices.Guid("50076313-0259-464A-9BC7-5B4FBC26A764")]
+  public class PolylineFromPointsCommand : Command
   {
     /// <summary>
     /// Gets the command name.
     /// </summary>
-    public override string EnglishName => "RockfishIntersectBreps";
+    public override string EnglishName => "RF_PolylineFromPoints";
 
     /// <summary>
     /// Called by Rhino when the user wants to run the command.
@@ -28,29 +29,32 @@ namespace RockfishClient.Commands
         return rc;
 
       var go = new GetObject();
-      go.SetCommandPrompt("Select Breps");
-      go.GeometryFilter = ObjectType.Surface | ObjectType.PolysrfFilter;
+      go.SetCommandPrompt("Select points for polyline creation");
+      go.GeometryFilter = ObjectType.Point;
       go.SubObjectSelect = false;
-      go.GetMultiple(2, 2);
+      go.GetMultiple(2, 0);
       if (go.CommandResult() != Result.Success)
         return go.CommandResult();
 
-      var brep0 = go.Object(0).Brep();
-      var brep1 = go.Object(1).Brep();
-      if (null == brep0 || null == brep1)
-        return Result.Failure;
+      var in_points = new List<RockfishPoint>(go.ObjectCount);
+      foreach (var obj_ref in go.Objects())
+      {
+        var point = obj_ref.Point();
+        if (null != point)
+          in_points.Add(new RockfishPoint(point.Location));
+      }
 
-      var in_brep0 = new RockfishGeometry(brep0);
-      var in_brep1 = new RockfishGeometry(brep1);
+      if (in_points.Count < 2)
+        return Result.Cancel;
 
-      RockfishGeometry[] out_curves;
+      RockfishGeometry out_curve;
       try
       {
         var host_name = RockfishClientPlugIn.Instance.ServerHostName();
         using (var channel = new RockfishChannel())
         {
           channel.Create(host_name);
-          out_curves = channel.IntersectBreps(in_brep0, in_brep1, doc.ModelAbsoluteTolerance);
+          out_curve = channel.PolylineFromPoints(in_points.ToArray(), doc.ModelAbsoluteTolerance);
         }
       }
       catch (Exception ex)
@@ -59,17 +63,11 @@ namespace RockfishClient.Commands
         return Result.Failure;
       }
 
-      foreach (var out_curve in out_curves)
+      if (null != out_curve?.Curve)
       {
-        if (null != out_curve?.Curve)
-        {
-          var object_id = doc.Objects.AddCurve(out_curve.Curve);
-          var rhino_object = doc.Objects.Find(object_id);
-          rhino_object?.Select(true);
-        }
+        doc.Objects.AddCurve(out_curve.Curve);
+        doc.Views.Redraw();
       }
-
-      doc.Views.Redraw();
 
       return Result.Success;
     }

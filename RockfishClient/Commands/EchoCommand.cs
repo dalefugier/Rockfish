@@ -7,15 +7,15 @@ using RockfishCommon;
 namespace RockfishClient.Commands
 {
   /// <summary>
-  /// RockfishEcho command
+  /// RF_Echo command
   /// </summary>
   [System.Runtime.InteropServices.Guid("F474A13B-DA09-427F-933A-2DC57D1E12D0")]
-  public class RockfishEchoCommand : Command
+  public class EchoCommand : Command
   {
     /// <summary>
     /// Gets the command name.
     /// </summary>
-    public override string EnglishName => "RockfishEcho";
+    public override string EnglishName => "RF_Echo";
 
     /// <summary>
     /// Called by Rhino when the user wants to run the command.

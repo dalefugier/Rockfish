@@ -6,6 +6,7 @@ namespace RockfishCommon
 {
   public class RockfishChannel : IDisposable
   {
+    private const int MAX_BUFFER = 4194304; // 4 MB
     private ChannelFactory<IRockfishService> m_factory;
     private IRockfishService m_channel;
     //private NetNamedPipeBinding m_binding;
@@ -34,9 +35,18 @@ namespace RockfishCommon
       var rc = false;
       try
       {
-        //m_binding = new NetNamedPipeBinding();
+        //m_binding = new NetNamedPipeBinding
+        //{
+        //  MaxBufferSize = MAX_BUFFER,
+        //  MaxReceivedMessageSize = MAX_BUFFER
+        //};
         //var uri = "net.pipe://localhost/mcneel/rockfishserver/5/server/pipe";
-        m_binding = new BasicHttpBinding();
+
+        m_binding = new BasicHttpBinding
+        {
+          MaxBufferSize = MAX_BUFFER,
+          MaxReceivedMessageSize = MAX_BUFFER
+        };
         var uri = $"http://{hostName}:8000/mcneel/rockfish/5/server/basic";
         m_endpoint = new EndpointAddress(uri);
         m_factory = new ChannelFactory<IRockfishService>(m_binding, m_endpoint);
@@ -83,6 +93,9 @@ namespace RockfishCommon
     /// <returns>The intersection curves if successful.</returns>
     public RockfishGeometry[] IntersectBreps(RockfishGeometry inBrep0, RockfishGeometry inBrep1, double tolerance)
     {
+      if (null == inBrep0?.Brep || null == inBrep1?.Brep)
+        return null;
+
       if (IsValid)
       {
         try
@@ -112,6 +125,9 @@ namespace RockfishCommon
     /// <returns>The polyline curve if successful.</returns>
     public RockfishGeometry PolylineFromPoints(RockfishPoint[] inPoints, double minimumDistance)
     {
+      if (null == inPoints || 0 == inPoints.Length)
+        return null;
+
       if (IsValid)
       {
         try
@@ -139,6 +155,9 @@ namespace RockfishCommon
     /// <returns>The mesh if successful.</returns>
     public RockfishGeometry CreateMeshFromBrep(RockfishGeometry inBrep, bool bSmooth)
     {
+      if (null == inBrep?.Brep)
+        return null;
+
       if (IsValid)
       {
         try
@@ -165,22 +184,15 @@ namespace RockfishCommon
     /// </summary>
     private static void HandleException(Exception ex)
     {
+      Console.WriteLine(ex.Message);
       if (ex is FaultException)
-      {
         ThrowFaultException((FaultException)ex);
-      }
       else if (ex is CommunicationException)
-      {
         ThrowCommunicationException((CommunicationException)ex);
-      }
       else if (ex is TimeoutException)
-      {
         ThrowTimeoutException((TimeoutException)ex);
-      }
       else
-      {
         ThrowGeneralException(ex);
-      }
     }
 
     /// <summary>

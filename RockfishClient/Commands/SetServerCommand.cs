@@ -6,15 +6,15 @@ using RockfishCommon;
 namespace RockfishClient.Commands
 {
   /// <summary>
-  /// RockfishSetServer command
+  /// RF_SetServer command
   /// </summary>
   [System.Runtime.InteropServices.Guid("3BDD436B-094B-4531-B345-5C9E8F29E257")]
-  public class RockfishSetServerCommand : Command
+  public class SetServerCommand : Command
   {
     /// <summary>
     /// Gets the command name.
     /// </summary>
-    public override string EnglishName => "RockfishSetServer";
+    public override string EnglishName => "RF_SetServer";
 
     /// <summary>
     /// Called by Rhino when the user wants to run the command.

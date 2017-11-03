@@ -10,6 +10,7 @@ namespace RockfishServer
 {
   public class RockfishServerCommand : Command
   {
+    private const int MAX_BUFFER = 4194304; // 4 MB
     private ServiceHost m_service_host;
 
     /// <summary>
@@ -38,7 +39,7 @@ namespace RockfishServer
     }
 
     /// <summary>
-    /// Detects whether or not Rhino is running "as Administrtor".
+    /// Detects whether or not Rhino is running "as Administrator".
     /// Adminstrative privledges are required to HTTP binding.
     /// </summary>
     private static bool IsAdministrator()
@@ -63,9 +64,9 @@ namespace RockfishServer
     {
       try
       {
-        //  m_service_host = new ServiceHost(
-        //    typeof(RockfishService),
-        //    new Uri("net.pipe://localhost/mcneel/rockfishserver/5/server"));
+        //m_service_host = new ServiceHost(
+        //  typeof(RockfishService),
+        //  new Uri("net.pipe://localhost/mcneel/rockfishserver/5/server"));
 
         m_service_host = new ServiceHost(
           typeof(RockfishService), 
@@ -82,13 +83,20 @@ namespace RockfishServer
 
       try
       {
-        //m_service_host.AddServiceEndpoint(
-        //  typeof(IRockfishService), 
-        //  new NetNamedPipeBinding(), "pipe");
+        //var binding = new NetNamedPipeBinding
+        //{
+        //  MaxBufferSize = MAX_BUFFER,
+        //  MaxReceivedMessageSize = MAX_BUFFER
+        //};
 
-        m_service_host.AddServiceEndpoint(
-          typeof(IRockfishService),
-          new BasicHttpBinding(), "basic");
+        var binding = new BasicHttpBinding
+        {
+          MaxBufferSize = MAX_BUFFER,
+          MaxReceivedMessageSize = MAX_BUFFER
+        };
+
+        //m_service_host.AddServiceEndpoint(typeof(IRockfishService), binding, "pipe");
+        m_service_host.AddServiceEndpoint(typeof(IRockfishService), binding, "basic");
 
         RhinoApp.WriteLine("Service end point created.");
       }

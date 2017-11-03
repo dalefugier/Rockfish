@@ -64,34 +64,22 @@ namespace RockfishConsole
         return 1;
       }
 
+      var out_file = new File3dm();
+      var filename = Path.GetFileNameWithoutExtension(path);
+      var new_filename = $"{filename}_mesh";
+      var out_path = path.Replace(filename, new_filename);
+
       try
       {
         using (var channel = new RockfishChannel())
         {
           channel.Create(host_name);
-
-          Console.WriteLine(path);
-          var filename = Path.GetFileNameWithoutExtension(path);
-          Console.WriteLine(filename);
-
-          for (var i = 0; i < breps.Count; i++)
+          foreach (var brep in breps)
           {
-            var in_brep = new RockfishGeometry(breps[i]);
+            var in_brep = new RockfishGeometry(brep);
             var out_mesh = channel.CreateMeshFromBrep(in_brep, false);
             if (null != out_mesh?.Mesh)
-            {
-              var new_filename = $"{filename}_mesh{i}";
-              Console.WriteLine(new_filename);
-              var out_path = path.Replace(filename, new_filename);
-              Console.WriteLine(out_path);
-
-              var out_file = new File3dm();
               out_file.Objects.AddMesh(out_mesh.Mesh);
-              out_file.Polish();
-
-
-              out_file.Write(out_path, 5);
-            }
           }
         }
       }
@@ -100,6 +88,9 @@ namespace RockfishConsole
         Console.WriteLine(ex.Message);
         return 1;
       }
+
+      out_file.Polish();
+      out_file.Write(out_path, 5);
 
       return 0;
     }

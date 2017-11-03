@@ -34,7 +34,7 @@ namespace RockfishServer
     /// <returns>The intersection curves if successful.</returns>
     public RockfishGeometry[] IntersectBreps(RockfishGeometry inBrep0, RockfishGeometry inBrep1, double tolerance)
     {
-      RhinoApp.WriteLine("IntersectBreps request received");
+      RhinoApp.WriteLine("IntersectBreps request received.");
 
       if (null == inBrep0?.Brep || null == inBrep1?.Brep)
         return new RockfishGeometry[0];
@@ -47,6 +47,7 @@ namespace RockfishServer
       for (var i = 0; i < curves.Length; i++)
         out_curves[i] = new RockfishGeometry(curves[i]);
 
+      RhinoApp.WriteLine("  results returned.");
       return out_curves;
     }
 
@@ -63,7 +64,7 @@ namespace RockfishServer
     /// <returns>The polyline curve if successful.</returns>
     public RockfishGeometry PolylineFromPoints(RockfishPoint[] inPoints, double minimumDistance)
     {
-      RhinoApp.WriteLine("PolylineFromPoints request received");
+      RhinoApp.WriteLine("PolylineFromPoints request received.");
 
       if (null == inPoints || 0 == inPoints.Length)
         return null;
@@ -78,6 +79,7 @@ namespace RockfishServer
       var polyline_curve = new PolylineCurve(culled_points);
       var out_curve = new RockfishGeometry(polyline_curve);
 
+      RhinoApp.WriteLine("  results returned.");
       return out_curve;
     }
 
@@ -92,7 +94,7 @@ namespace RockfishServer
     /// <returns>The mesh if successful.</returns>
     public RockfishGeometry CreateMeshFromBrep(RockfishGeometry inBrep, bool bSmooth)
     {
-      RhinoApp.WriteLine("CreateMeshFromBrep request received");
+      RhinoApp.WriteLine("CreateMeshFromBrep request received.");
 
       if (null == inBrep?.Brep)
         return null;
@@ -108,6 +110,7 @@ namespace RockfishServer
 
       var out_mesh = new RockfishGeometry(brep_mesh);
 
+      RhinoApp.WriteLine("  results returned.");
       return out_mesh;
     }
   }
