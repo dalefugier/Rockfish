@@ -14,7 +14,7 @@ namespace RockfishServer
   {
     private readonly object m_locker;
     private readonly Queue<RockfishHeader> m_queue;
-    readonly Timer m_timer;
+    private readonly Timer m_timer;
     private string m_path;
 
     /// <summary>
@@ -47,12 +47,12 @@ namespace RockfishServer
     {
       m_locker = new object();
       m_queue = new Queue<RockfishHeader>();
-      m_timer = new Timer { Interval = 15000 };
+      m_timer = new Timer { Interval = 5000 };
       m_timer.Elapsed += OnTimerElapsed;
     }
 
     /// <summary>
-    /// The one and only RockfishLog object
+    /// The one and only RockfishLog object.
     /// </summary>
     static RockfishLog g_the_log;
 
@@ -91,7 +91,7 @@ namespace RockfishServer
     }
 
     /// <summary>
-    /// Adds an item to the end of the queue
+    /// Adds an item to the queue.
     /// </summary>
     public void Enqueue(RockfishHeader header)
     {
@@ -106,7 +106,7 @@ namespace RockfishServer
     }
 
     /// <summary>
-    /// Writes the records to disk
+    /// Writes the records to disk.
     /// </summary>
     public bool Write()
     {

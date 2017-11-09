@@ -33,7 +33,7 @@ namespace RockfishCommon
     public abstract string HostName { get; }
 
     /// <summary>
-    /// Public creator
+    /// Public creation method
     /// </summary>
     public bool Create()
     {
@@ -50,13 +50,9 @@ namespace RockfishCommon
         };
 
         var uri = $"http://{HostName}:8000/mcneel/rockfish/5/server/basic";
-
         var endpoint = new EndpointAddress(uri);
-
         m_factory = new ChannelFactory<IRockfishService>(binding, endpoint);
-
         m_channel = m_factory.CreateChannel();
-        (m_channel as IClientChannel).Faulted += ChannelFaulted;
 
         rc = true;
       }
@@ -257,22 +253,8 @@ namespace RockfishCommon
     }
 
     /// <summary>
-    /// Event handler for the Faulted event of the IClientChannel
+    /// IDisposable interface
     /// </summary>
-    private static void ChannelFaulted(object sender, EventArgs e)
-    {
-      var channel = (IClientChannel)sender;
-      try
-      {
-        channel.Close();
-      }
-      catch
-      {
-        channel.Abort();
-      }
-    }
-
-    /// <inheritdoc />
     public void Dispose()
     {
       Dispose(true);
@@ -290,7 +272,23 @@ namespace RockfishCommon
         {
           lock (m_locker)
           {
-            if (null != m_factory)
+            // Close the communication channel. Note, despite the `suspicious` compiler
+            // warning, you can do an explicit cast. The ChannelFactory.CreateChannel() 
+            // signature returns the IRockfishService interface. But is also inherits
+            // from the IChannel interface under the hood.
+            var channel = (IClientChannel) m_channel;
+            try
+            {
+              channel.Close();
+            }
+            catch
+            {
+              channel.Abort();
+            }
+            m_channel = null;
+
+            // Close the channel factory
+            if (m_factory.State == CommunicationState.Closed)
             {
               try
               {
@@ -302,8 +300,6 @@ namespace RockfishCommon
               }
               m_factory = null;
             }
-
-            m_channel = null;
           }
 
           m_disposed = true;

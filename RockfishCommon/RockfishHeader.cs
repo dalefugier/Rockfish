@@ -65,7 +65,7 @@ namespace RockfishCommon
       sb.AppendFormat("{0:G},", Date.ToLocalTime());
       sb.AppendFormat("{0},", Method);
       sb.AppendFormat("{0},", ClientId);
-      sb.AppendFormat("{0},", Succeeded);
+      sb.AppendFormat("{0}", Succeeded);
       return sb.ToString();
     }
   }
