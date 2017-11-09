@@ -24,7 +24,7 @@ namespace RockfishClient.Commands
     /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
-      var rc = RockfishClientPlugIn.Instance.VerifyServerHostName();
+      var rc = RockfishClientPlugIn.VerifyServerHostName();
       if (rc != Result.Success)
         return rc;
 
@@ -59,11 +59,9 @@ namespace RockfishClient.Commands
 
       try
       {
-        var host_name = RockfishClientPlugIn.Instance.ServerHostName();
-        using (var channel = new RockfishChannel())
+        using (var channel = new RockfishClientChannel())
         {
-          channel.Create(host_name);
-
+          channel.Create();
           foreach (var brep in breps)
           {
             var in_brep = new RockfishGeometry(brep);

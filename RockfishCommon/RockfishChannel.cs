@@ -4,53 +4,60 @@ using System.ServiceModel;
 
 namespace RockfishCommon
 {
-  public class RockfishChannel : IDisposable
+  public abstract class RockfishChannel : IDisposable
   {
     private const int MAX_BUFFER = 4194304; // 4 MB
+
+    private readonly object m_locker;
     private ChannelFactory<IRockfishService> m_factory;
     private IRockfishService m_channel;
-    //private NetNamedPipeBinding m_binding;
-    private BasicHttpBinding m_binding;
-    private EndpointAddress m_endpoint;
-    private readonly object m_locker;
     private bool m_disposed;
 
     /// <summary>
-    /// Public constructor
+    /// Protected constructor
     /// </summary>
-    public RockfishChannel()
+    protected RockfishChannel()
     {
       m_locker = new object();
       m_disposed = false;
     }
 
     /// <summary>
+    /// Gets an id that allows events to be aggregated by user. 
+    /// </summary>
+    public abstract string ClientId { get; }
+
+    /// <summary>
+    /// Gets the host name or ip address of the target server.
+    /// </summary>
+    public abstract string HostName { get; }
+
+    /// <summary>
     /// Public creator
     /// </summary>
-    public bool Create(string hostName)
+    public bool Create()
     {
-      if (string.IsNullOrEmpty(hostName))
+      if (string.IsNullOrEmpty(HostName))
         return false;
 
       var rc = false;
       try
       {
-        //m_binding = new NetNamedPipeBinding
-        //{
-        //  MaxBufferSize = MAX_BUFFER,
-        //  MaxReceivedMessageSize = MAX_BUFFER
-        //};
-        //var uri = "net.pipe://localhost/mcneel/rockfishserver/5/server/pipe";
-
-        m_binding = new BasicHttpBinding
+        var binding = new BasicHttpBinding
         {
           MaxBufferSize = MAX_BUFFER,
           MaxReceivedMessageSize = MAX_BUFFER
         };
-        var uri = $"http://{hostName}:8000/mcneel/rockfish/5/server/basic";
-        m_endpoint = new EndpointAddress(uri);
-        m_factory = new ChannelFactory<IRockfishService>(m_binding, m_endpoint);
+
+        var uri = $"http://{HostName}:8000/mcneel/rockfish/5/server/basic";
+
+        var endpoint = new EndpointAddress(uri);
+
+        m_factory = new ChannelFactory<IRockfishService>(binding, endpoint);
+
         m_channel = m_factory.CreateChannel();
+        (m_channel as IClientChannel).Faulted += ChannelFaulted;
+
         rc = true;
       }
       catch (Exception ex)
@@ -72,7 +79,8 @@ namespace RockfishCommon
       {
         try
         {
-          var result = m_channel.Echo(str);
+          var header = new RockfishHeader(ClientId);
+          var result = m_channel.Echo(header, str);
           return result;
         }
         catch (Exception ex)
@@ -100,7 +108,8 @@ namespace RockfishCommon
       {
         try
         {
-          var result = m_channel.IntersectBreps(inBrep0, inBrep1, tolerance);
+          var header = new RockfishHeader(ClientId);
+          var result = m_channel.IntersectBreps(header, inBrep0, inBrep1, tolerance);
           return result;
         }
         catch (Exception ex)
@@ -132,7 +141,8 @@ namespace RockfishCommon
       {
         try
         {
-          var result = m_channel.PolylineFromPoints(inPoints, minimumDistance);
+          var header = new RockfishHeader(ClientId);
+          var result = m_channel.PolylineFromPoints(header, inPoints, minimumDistance);
           return result;
         }
         catch (Exception ex)
@@ -162,7 +172,8 @@ namespace RockfishCommon
       {
         try
         {
-          var result = m_channel.CreateMeshFromBrep(inBrep, bSmooth);
+          var header = new RockfishHeader(ClientId);
+          var result = m_channel.CreateMeshFromBrep(header, inBrep, bSmooth);
           return result;
         }
         catch (Exception ex)
@@ -185,8 +196,9 @@ namespace RockfishCommon
     private static void HandleException(Exception ex)
     {
       Console.WriteLine(ex.Message);
-      if (ex is FaultException)
-        ThrowFaultException((FaultException)ex);
+      var exception = ex as FaultException;
+      if (exception != null)
+        ThrowFaultException(exception);
       else if (ex is CommunicationException)
         ThrowCommunicationException((CommunicationException)ex);
       else if (ex is TimeoutException)
@@ -202,7 +214,7 @@ namespace RockfishCommon
     {
       Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
       const string message = "There was a problem creating the communication channel.";
-      throw new RockfishChannelException(message);
+      throw new RockfishException(message);
     }
 
     /// <summary>
@@ -211,7 +223,7 @@ namespace RockfishCommon
     private static void ThrowFaultException(FaultException ex)
     {
       Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
-      throw new RockfishChannelException(ex.Message);
+      throw new RockfishException(ex.Message);
     }
 
     /// <summary>
@@ -221,7 +233,7 @@ namespace RockfishCommon
     {
       Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
       const string message = "There was a problem communicating with the service.";
-      throw new RockfishChannelException(message);
+      throw new RockfishException(message);
     }
 
     /// <summary>
@@ -231,7 +243,7 @@ namespace RockfishCommon
     {
       Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
       const string message = "The service operation has timed out.";
-      throw new RockfishChannelException(message);
+      throw new RockfishException(message);
     }
 
     /// <summary>
@@ -241,7 +253,23 @@ namespace RockfishCommon
     {
       Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
       const string message = "An unknown exception has occurred.";
-      throw new RockfishChannelException(message);
+      throw new RockfishException(message);
+    }
+
+    /// <summary>
+    /// Event handler for the Faulted event of the IClientChannel
+    /// </summary>
+    private static void ChannelFaulted(object sender, EventArgs e)
+    {
+      var channel = (IClientChannel)sender;
+      try
+      {
+        channel.Close();
+      }
+      catch
+      {
+        channel.Abort();
+      }
     }
 
     /// <inheritdoc />
@@ -262,20 +290,20 @@ namespace RockfishCommon
         {
           lock (m_locker)
           {
-            if (null != m_channel)
-            {
-              ((IClientChannel) m_channel).Abort();
-              m_channel = null;
-            }
-
             if (null != m_factory)
             {
-              m_factory.Abort();
+              try
+              {
+                m_factory.Close();
+              }
+              catch
+              {
+                m_factory.Abort();
+              }
               m_factory = null;
             }
 
-            m_endpoint = null;
-            m_binding = null;
+            m_channel = null;
           }
 
           m_disposed = true;

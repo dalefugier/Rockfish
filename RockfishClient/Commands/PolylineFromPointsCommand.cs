@@ -24,7 +24,7 @@ namespace RockfishClient.Commands
     /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
-      var rc = RockfishClientPlugIn.Instance.VerifyServerHostName();
+      var rc = RockfishClientPlugIn.VerifyServerHostName();
       if (rc != Result.Success)
         return rc;
 
@@ -50,10 +50,10 @@ namespace RockfishClient.Commands
       RockfishGeometry out_curve;
       try
       {
-        var host_name = RockfishClientPlugIn.Instance.ServerHostName();
-        using (var channel = new RockfishChannel())
+        RockfishClientPlugIn.ServerHostName();
+        using (var channel = new RockfishClientChannel())
         {
-          channel.Create(host_name);
+          channel.Create();
           out_curve = channel.PolylineFromPoints(in_points.ToArray(), doc.ModelAbsoluteTolerance);
         }
       }

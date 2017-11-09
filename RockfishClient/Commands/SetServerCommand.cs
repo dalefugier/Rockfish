@@ -1,7 +1,6 @@
 ﻿using Rhino;
 using Rhino.Commands;
 using Rhino.Input.Custom;
-using RockfishCommon;
 
 namespace RockfishClient.Commands
 {
@@ -21,7 +20,7 @@ namespace RockfishClient.Commands
     /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
-      var server_host_name = RockfishClientPlugIn.Instance.ServerHostName();
+      var server_host_name = RockfishClientPlugIn.ServerHostName();
 
       for (var i = 0; i < 3; i++)
       {
@@ -49,9 +48,9 @@ namespace RockfishClient.Commands
         var found = false;
         try
         {
-          using (var channel = new RockfishChannel())
+          using (var channel = new RockfishClientChannel())
           {
-            channel.Create(host_name);
+            channel.Create();
             var echo = channel.Echo("Echo");
             found = !string.IsNullOrEmpty(echo);
           }
@@ -67,7 +66,7 @@ namespace RockfishClient.Commands
           continue;
         }
 
-        RockfishClientPlugIn.Instance.SetServerHostName(host_name);
+        RockfishClientPlugIn.ThePlugIn.SetServerHostName(host_name);
         break;
       }
 

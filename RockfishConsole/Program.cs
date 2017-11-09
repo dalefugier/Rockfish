@@ -9,9 +9,12 @@ using RockfishCommon;
 
 namespace RockfishConsole
 {
-  class Program
+  internal class Program
   {
-    static int Main(string[] args)
+    /// <summary>
+    /// Main function
+    /// </summary>
+    private static int Main(string[] args)
     {
       if (2 != args.Length)
       {
@@ -71,15 +74,18 @@ namespace RockfishConsole
 
       try
       {
-        using (var channel = new RockfishChannel())
+        using (var channel = new ConsoleChannel(host_name))
         {
-          channel.Create(host_name);
+          channel.Create();
           foreach (var brep in breps)
           {
-            var in_brep = new RockfishGeometry(brep);
-            var out_mesh = channel.CreateMeshFromBrep(in_brep, false);
-            if (null != out_mesh?.Mesh)
-              out_file.Objects.AddMesh(out_mesh.Mesh);
+            if (brep.IsValid)
+            {
+              var in_brep = new RockfishGeometry(brep);
+              var out_mesh = channel.CreateMeshFromBrep(in_brep, false);
+              if (null != out_mesh?.Mesh)
+                out_file.Objects.AddMesh(out_mesh.Mesh);
+            }
           }
         }
       }
@@ -119,7 +125,5 @@ namespace RockfishConsole
 
       return null;
     }
-
-
   }
 }

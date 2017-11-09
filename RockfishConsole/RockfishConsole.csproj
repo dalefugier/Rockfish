@@ -55,15 +55,19 @@
     <Compile Include="..\RockfishCommon\RockfishChannel.cs">
       <Link>RockfishCommon\RockfishChannel.cs</Link>
     </Compile>
-    <Compile Include="..\RockfishCommon\RockfishChannelException.cs">
-      <Link>RockfishCommon\RockfishChannelException.cs</Link>
+    <Compile Include="..\RockfishCommon\RockfishException.cs">
+      <Link>RockfishCommon\RockfishException.cs</Link>
     </Compile>
     <Compile Include="..\RockfishCommon\RockfishGeometry.cs">
       <Link>RockfishCommon\RockfishGeometry.cs</Link>
     </Compile>
+    <Compile Include="..\RockfishCommon\RockfishHeader.cs">
+      <Link>RockfishCommon\RockfishHeader.cs</Link>
+    </Compile>
     <Compile Include="..\RockfishCommon\RockfishPoint.cs">
       <Link>RockfishCommon\RockfishPoint.cs</Link>
     </Compile>
+    <Compile Include="ConsoleChannel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

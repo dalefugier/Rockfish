@@ -133,7 +133,7 @@ namespace RockfishCommon
     /// class. This serialization binder help deserialize the equivalent 
     /// objects across the different assemblies.
     /// </remarks>
-    public class RockfishDeserializationBinder : SerializationBinder
+    internal class RockfishDeserializationBinder : SerializationBinder
     {
       public override Type BindToType(string assemblyName, string typeName)
       {

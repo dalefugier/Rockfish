@@ -48,8 +48,9 @@
   <ItemGroup>
     <Compile Include="IRockfishService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RockfishHeader.cs" />
     <Compile Include="RockfishChannel.cs" />
-    <Compile Include="RockfishChannelException.cs" />
+    <Compile Include="RockfishException.cs" />
     <Compile Include="RockfishGeometry.cs" />
     <Compile Include="RockfishPoint.cs" />
   </ItemGroup>

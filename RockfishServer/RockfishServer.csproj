@@ -45,10 +45,15 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RockfishServerCommand.cs" />
+    <Compile Include="Commands\ConfigCommand.cs" />
+    <Compile Include="Commands\StartCommand.cs" />
+    <Compile Include="Commands\StopCommand.cs" />
+    <Compile Include="RockfishRecord.cs" />
     <Compile Include="RockfishServerPlugIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RockfishService.cs" />
+    <Compile Include="RockfishServiceHost.cs" />
+    <Compile Include="RockfishLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RockfishCommon\RockfishCommon.csproj">
