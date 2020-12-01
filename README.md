@@ -15,8 +15,8 @@ The Rockfish sample solution contains the following projects:
 **RockfishServer** - This project builds a RhinoCommon plug-in that hosts a WCF Service. The service current uses basic HTTP binding, but it has provisions for named pipes for ease of testing. The service contract has four simple operations that can be called from client systems. The project has three commands:
 
 -  ```RockfishStart``` - Starts the service. 
--  ```RockfishStart``` - Stops the service. 
--  ```RockfishStart``` - Configures service options. 
+-  ```RockfishStep``` - Stops the service. 
+-  ```RockfishConfig``` - Configures service options. 
 
 Note, to access the service remotely, you will need to open ```TCP Port 8000``` on any firewall software running on the system. And in order for the service to listen on ```TCP Port 8000```, Rhino will need to be launched "as Administrator."
 
