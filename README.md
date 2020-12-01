@@ -18,7 +18,7 @@ The Rockfish sample solution contains the following projects:
 -  ```RockfishStep``` - Stops the service. 
 -  ```RockfishConfig``` - Configures service options. 
 
-Note, to access the service remotely, you will need to open ```TCP Port 8000``` on any firewall software running on the system. And in order for the service to listen on ```TCP Port 8000```, Rhino will need to be launched "as Administrator."
+Note, to access the service remotely, you will need to open ```TCP Port 8000``` on any firewall software running on the system. And in order for the service to listen on ```TCP Port 8000```, Rhino will need to be `Run as administrator`."
 
 **RockfishClient** - This project also builds a RhinoCommon plug-in, and it consumes the service provided by RockfishServer. The plug-in provides five simple commands:
 
